@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
 
 spring:
   application:
@@ -88,13 +88,9 @@ spring:
 jwt:
   secret: studyapp4-jwt-secret-key-2025-kaoyan-learning-platform
 
-# 不需要鉴权的路径
+# 不需要鉴权的路径（逗号分隔）
 auth:
-  exclude-paths:
-    - /api/v1/user/wx-login
-    - /api/v1/user/register
-    - /api/v1/community/posts/list
-    - /api/v1/resource/public/**
+  exclude-paths: /api/v1/user/wx-login,/api/v1/user/register,/api/v1/community/posts/list,/api/v1/resource/public/**
 
 logging:
   level:
