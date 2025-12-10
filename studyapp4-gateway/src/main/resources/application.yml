@@ -1,0 +1,99 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: studyapp4-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: dev
+      config:
+        server-addr: localhost:8848
+        namespace: dev
+        file-extension: yml
+        refresh-enabled: true
+    gateway:
+      routes:
+        # 用户服务路由
+        - id: studyapp4-user
+          uri: lb://studyapp4-user
+          predicates:
+            - Path=/api/v1/user/**
+          filters:
+            - StripPrefix=0
+        
+        # 资源服务路由
+        - id: studyapp4-resource
+          uri: lb://studyapp4-resource
+          predicates:
+            - Path=/api/v1/resource/**
+          filters:
+            - StripPrefix=0
+        
+        # 学习计划服务路由
+        - id: studyapp4-plan
+          uri: lb://studyapp4-plan
+          predicates:
+            - Path=/api/v1/plan/**
+          filters:
+            - StripPrefix=0
+        
+        # 题库服务路由
+        - id: studyapp4-exam
+          uri: lb://studyapp4-exam
+          predicates:
+            - Path=/api/v1/exam/**
+          filters:
+            - StripPrefix=0
+        
+        # 社区服务路由
+        - id: studyapp4-community
+          uri: lb://studyapp4-community
+          predicates:
+            - Path=/api/v1/community/**
+          filters:
+            - StripPrefix=0
+        
+        # 后台管理服务路由
+        - id: studyapp4-admin
+          uri: lb://studyapp4-admin
+          predicates:
+            - Path=/api/v1/admin/**
+          filters:
+            - StripPrefix=0
+      
+      # 全局 CORS 配置
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+            max-age: 3600
+      
+      # 默认过滤器
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            statuses: BAD_GATEWAY,GATEWAY_TIMEOUT
+            methods: GET,POST
+
+# JWT 配置
+jwt:
+  secret: studyapp4-jwt-secret-key-2025-kaoyan-learning-platform
+
+# 不需要鉴权的路径
+auth:
+  exclude-paths:
+    - /api/v1/user/wx-login
+    - /api/v1/user/register
+    - /api/v1/community/posts/list
+    - /api/v1/resource/public/**
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
