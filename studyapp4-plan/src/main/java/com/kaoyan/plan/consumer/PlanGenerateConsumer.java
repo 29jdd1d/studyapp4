@@ -156,11 +156,11 @@ public class PlanGenerateConsumer {
                     day % 2 == 0 ? "数学" : "专业课一", 
                     day % 2 == 0 ? "高等数学第" + (day + 1) + "章" : "专业课核心知识点梳理"));
             
-            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "下午",Id(), taskDate, "下午", 
+            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "下午", 
                     day % 3 == 0 ? "英语" : "专业课二", 
                     day % 3 == 0 ? "英语阅读训练（2篇）" : "专业课习题练习"));
             
-            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "晚上",Id(), taskDate, "晚上", 
+            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "晚上", 
                     "政治", "政治选择题练习（50题）"));
             
             // 周日休息或复盘
