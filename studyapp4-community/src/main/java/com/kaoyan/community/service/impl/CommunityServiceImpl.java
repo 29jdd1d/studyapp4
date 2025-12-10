@@ -89,7 +89,7 @@ public class CommunityServiceImpl implements CommunityService {
         }
         
         if (!post.getUserId().equals(userId)) {
-            throw new BusinessException(ResultCode.FORBIDDEN, "无权删除此帖子");
+            throw new BusinessException(ResultCode.FORBIDDEN.getCode(), "无权删除此帖子");
         }
         
         postMapper.deleteById(postId);
@@ -303,7 +303,7 @@ public class CommunityServiceImpl implements CommunityService {
         }
         
         if (!comment.getUserId().equals(userId)) {
-            throw new BusinessException(ResultCode.FORBIDDEN, "无权删除此评论");
+            throw new BusinessException(ResultCode.FORBIDDEN.getCode(), "无权删除此评论");
         }
         
         commentMapper.deleteById(commentId);
