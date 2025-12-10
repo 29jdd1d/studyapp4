@@ -2,9 +2,9 @@ package com.kaoyan.plan.consumer;
 
 import com.kaoyan.plan.dto.PlanGenerateMessage;
 import com.kaoyan.plan.entity.StudyPlan;
-import com.kaoyan.plan.entity.TaskItem;
+import com.kaoyan.plan.entity.StudyTask;
 import com.kaoyan.plan.mapper.StudyPlanMapper;
-import com.kaoyan.plan.mapper.TaskItemMapper;
+import com.kaoyan.plan.mapper.StudyTaskMapper;
 import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import java.util.Map;
 public class PlanGenerateConsumer {
     
     private final StudyPlanMapper studyPlanMapper;
-    private final TaskItemMapper taskItemMapper;
+    private final StudyTaskMapper studyTaskMapper;
     
     /**
      * 监听学习计划生成队列
@@ -61,16 +61,16 @@ public class PlanGenerateConsumer {
             String content = generatePlanContent(message);
             
             // 3. 生成初始任务列表
-            List<TaskItem> tasks = generateInitialTasks(message);
+            List<StudyTask> tasks = generateInitialTasks(message);
             
             // 4. 更新计划内容
-            plan.setContent(content);
+            plan.setPlanContent(content);
             plan.setUpdateTime(LocalDateTime.now());
             studyPlanMapper.updateById(plan);
             
             // 5. 批量插入任务
             if (!tasks.isEmpty()) {
-                tasks.forEach(taskItemMapper::insert);
+                tasks.forEach(studyTaskMapper::insert);
             }
             
             log.info("学习计划生成完成: planId={}, 生成任务数={}", message.getPlanId(), tasks.size());
@@ -143,8 +143,8 @@ public class PlanGenerateConsumer {
     /**
      * 生成初始任务列表（第一周的任务）
      */
-    private List<TaskItem> generateInitialTasks(PlanGenerateMessage message) {
-        List<TaskItem> tasks = new ArrayList<>();
+    private List<StudyTask> generateInitialTasks(PlanGenerateMessage message) {
+        List<StudyTask> tasks = new ArrayList<>();
         LocalDate startDate = LocalDate.now();
         
         // 生成第一周的任务（7天）
@@ -152,20 +152,20 @@ public class PlanGenerateConsumer {
             LocalDate taskDate = startDate.plusDays(day);
             
             // 每天3-4个任务（上午、下午、晚上）
-            tasks.add(createTask(message.getPlanId(), taskDate, "上午", 
+            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "上午", 
                     day % 2 == 0 ? "数学" : "专业课一", 
                     day % 2 == 0 ? "高等数学第" + (day + 1) + "章" : "专业课核心知识点梳理"));
             
-            tasks.add(createTask(message.getPlanId(), taskDate, "下午", 
+            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "下午",Id(), taskDate, "下午", 
                     day % 3 == 0 ? "英语" : "专业课二", 
                     day % 3 == 0 ? "英语阅读训练（2篇）" : "专业课习题练习"));
             
-            tasks.add(createTask(message.getPlanId(), taskDate, "晚上", 
+            tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "晚上",Id(), taskDate, "晚上", 
                     "政治", "政治选择题练习（50题）"));
             
             // 周日休息或复盘
             if (day == 6) {
-                tasks.add(createTask(message.getPlanId(), taskDate, "全天", 
+                tasks.add(createTask(message.getUserId(), message.getPlanId(), taskDate, "全天", 
                         "复盘", "本周学习总结 + 错题整理"));
             }
         }
@@ -176,12 +176,13 @@ public class PlanGenerateConsumer {
     /**
      * 创建单个任务
      */
-    private TaskItem createTask(Long planId, LocalDate taskDate, String period, 
+    private StudyTask createTask(Long userId, Long planId, LocalDate taskDate, String period, 
                                  String subject, String content) {
-        TaskItem task = new TaskItem();
+        StudyTask task = new StudyTask();
+        task.setUserId(userId);
         task.setPlanId(planId);
         task.setTaskDate(taskDate);
-        task.setTaskName(subject + " - " + content);
+        task.setCategory(subject);
         task.setTaskContent(period + "：" + content);
         task.setStatus(0); // 未完成
         task.setCreateTime(LocalDateTime.now());
