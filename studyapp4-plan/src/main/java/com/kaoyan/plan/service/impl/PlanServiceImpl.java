@@ -7,6 +7,7 @@ import com.kaoyan.common.constant.RabbitMQConstants;
 import com.kaoyan.common.exception.BusinessException;
 import com.kaoyan.common.result.ResultCode;
 import com.kaoyan.plan.dto.PlanCreateRequest;
+import com.kaoyan.plan.dto.PlanGenerateMessage;
 import com.kaoyan.plan.dto.TaskCompleteRequest;
 import com.kaoyan.plan.entity.StudyPlan;
 import com.kaoyan.plan.entity.StudyTask;
@@ -78,16 +79,20 @@ public class PlanServiceImpl implements PlanService {
         studyPlanMapper.insert(plan);
         
         // 发送消息到 RabbitMQ，异步生成详细任务
-        Map<String, Object> message = new HashMap<>();
-        message.put("planId", plan.getId());
-        message.put("userId", userId);
-        message.put("totalDays", totalDays);
-        message.put("currentLevel", request.getCurrentLevel());
+        PlanGenerateMessage message = new PlanGenerateMessage(
+                userId,
+                plan.getId(),
+                "考研学习计划",
+                request.getTargetUniversity(),
+                request.getTargetMajor(),
+                request.getExamDate().toString(),
+                request.getCurrentLevel()
+        );
         
         rabbitTemplate.convertAndSend(
                 RabbitMQConstants.PLAN_GENERATE_EXCHANGE,
                 RabbitMQConstants.PLAN_GENERATE_ROUTING_KEY,
-                JSON.toJSONString(message)
+                message
         );
         
         log.info("学习计划创建成功: planId={}, userId={}", plan.getId(), userId);

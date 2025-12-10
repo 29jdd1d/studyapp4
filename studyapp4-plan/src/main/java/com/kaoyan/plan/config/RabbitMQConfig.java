@@ -2,6 +2,8 @@ package com.kaoyan.plan.config;
 
 import com.kaoyan.common.constant.RabbitMQConstants;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,6 +12,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMQConfig {
+    
+    /**
+     * 消息转换器（使用 JSON 格式）
+     */
+    @Bean
+    public MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
     
     /**
      * 学习计划生成 Exchange

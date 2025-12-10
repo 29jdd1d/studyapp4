@@ -16,8 +16,8 @@ public interface ResourceFeignClient {
     PageResult<Map<String, Object>> getResourceList(@RequestParam Map<String, Object> params);
     
     @PutMapping("/api/v1/resource/{resourceId}/status")
-    void updateResourceStatus(@PathVariable Long resourceId, @RequestParam Integer status);
+    void updateResourceStatus(@PathVariable("resourceId") Long resourceId, @RequestParam("status") Integer status);
     
     @DeleteMapping("/api/v1/resource/{resourceId}")
-    void deleteResource(@PathVariable Long resourceId);
+    void deleteResource(@PathVariable("resourceId") Long resourceId);
 }

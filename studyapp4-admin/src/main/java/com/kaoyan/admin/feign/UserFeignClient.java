@@ -16,5 +16,5 @@ public interface UserFeignClient {
     PageResult<Map<String, Object>> getUserList(@RequestParam Map<String, Object> params);
     
     @PutMapping("/api/v1/user/{userId}/status")
-    void updateUserStatus(@PathVariable Long userId, @RequestParam Integer status);
+    void updateUserStatus(@PathVariable("userId") Long userId, @RequestParam("status") Integer status);
 }

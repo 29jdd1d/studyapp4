@@ -48,4 +48,17 @@ public class PageResult<T> implements Serializable {
         this.size = size;
         this.records = records;
     }
+    
+    /**
+     * 从 MyBatis-Plus 的 Page 对象转换
+     */
+    public static <T> PageResult<T> of(com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
+        PageResult<T> result = new PageResult<>();
+        result.setTotal(page.getTotal());
+        result.setPages(page.getPages());
+        result.setCurrent(page.getCurrent());
+        result.setSize(page.getSize());
+        result.setRecords(page.getRecords());
+        return result;
+    }
 }

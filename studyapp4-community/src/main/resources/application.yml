@@ -6,6 +6,8 @@ spring:
     name: studyapp4-community
   cloud:
     nacos:
+      username: nacos
+      password: nacos123
       discovery:
         server-addr: localhost:8848
         namespace: dev

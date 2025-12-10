@@ -16,14 +16,14 @@ public interface CommunityFeignClient {
     PageResult<Map<String, Object>> getPostList(@RequestParam Map<String, Object> params);
     
     @PutMapping("/api/v1/community/post/{postId}/status")
-    void updatePostStatus(@PathVariable Long postId, @RequestParam Integer status);
+    void updatePostStatus(@PathVariable("postId") Long postId, @RequestParam("status") Integer status);
     
     @PutMapping("/api/v1/community/post/{postId}/top")
-    void setPostTop(@PathVariable Long postId, @RequestParam Boolean isTop);
+    void setPostTop(@PathVariable("postId") Long postId, @RequestParam("isTop") Boolean isTop);
     
     @PutMapping("/api/v1/community/post/{postId}/essence")
-    void setPostEssence(@PathVariable Long postId, @RequestParam Boolean isEssence);
+    void setPostEssence(@PathVariable("postId") Long postId, @RequestParam("isEssence") Boolean isEssence);
     
     @DeleteMapping("/api/v1/community/post/{postId}")
-    void deletePost(@PathVariable Long postId);
+    void deletePost(@PathVariable("postId") Long postId);
 }
