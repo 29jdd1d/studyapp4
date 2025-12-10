@@ -85,7 +85,7 @@ public class CommunityServiceImpl implements CommunityService {
     public void deletePost(Long userId, Long postId) {
         Post post = postMapper.selectById(postId);
         if (post == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "帖子不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "帖子不存在");
         }
         
         if (!post.getUserId().equals(userId)) {
@@ -154,7 +154,7 @@ public class CommunityServiceImpl implements CommunityService {
         
         Post post = postMapper.selectById(postId);
         if (post == null || post.getStatus() != 1) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "帖子不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "帖子不存在");
         }
         
         PostVO vo = convertToVO(post, userId);
@@ -192,7 +192,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .eq(Like::getType, "post");
         
         if (likeMapper.selectCount(wrapper) > 0) {
-            throw new BusinessException(ResultCode.PARAMS_ERROR, "已经点赞过了");
+            throw new BusinessException(ResultCode.PARAM_ERROR.getCode(), "已经点赞过了");
         }
         
         // 添加点赞记录
@@ -235,7 +235,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .eq(Collect::getPostId, postId);
         
         if (collectMapper.selectCount(wrapper) > 0) {
-            throw new BusinessException(ResultCode.PARAMS_ERROR, "已经收藏过了");
+            throw new BusinessException(ResultCode.PARAM_ERROR.getCode(), "已经收藏过了");
         }
         
         // 添加收藏记录
@@ -273,7 +273,7 @@ public class CommunityServiceImpl implements CommunityService {
         // 检查帖子是否存在
         Post post = postMapper.selectById(request.getPostId());
         if (post == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "帖子不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "帖子不存在");
         }
         
         Comment comment = new Comment();
@@ -299,7 +299,7 @@ public class CommunityServiceImpl implements CommunityService {
     public void deleteComment(Long userId, Long commentId) {
         Comment comment = commentMapper.selectById(commentId);
         if (comment == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "评论不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "评论不存在");
         }
         
         if (!comment.getUserId().equals(userId)) {
@@ -401,7 +401,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .eq(Like::getType, "comment");
         
         if (likeMapper.selectCount(wrapper) > 0) {
-            throw new BusinessException(ResultCode.PARAMS_ERROR, "已经点赞过了");
+            throw new BusinessException(ResultCode.PARAM_ERROR.getCode(), "已经点赞过了");
         }
         
         // 添加点赞记录
