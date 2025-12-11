@@ -18,6 +18,56 @@ spring:
         refresh-enabled: true
     gateway:
       routes:
+        # ========== Knife4j API文档路由 ==========
+        # 用户服务文档
+        - id: user-doc
+          uri: lb://studyapp4-user
+          predicates:
+            - Path=/user/doc.html,/user/swagger-resources/**,/user/v3/api-docs/**,/user/webjars/**
+          filters:
+            - StripPrefix=1
+        
+        # 资源服务文档
+        - id: resource-doc
+          uri: lb://studyapp4-resource
+          predicates:
+            - Path=/resource/doc.html,/resource/swagger-resources/**,/resource/v3/api-docs/**,/resource/webjars/**
+          filters:
+            - StripPrefix=1
+        
+        # 学习计划服务文档
+        - id: plan-doc
+          uri: lb://studyapp4-plan
+          predicates:
+            - Path=/plan/doc.html,/plan/swagger-resources/**,/plan/v3/api-docs/**,/plan/webjars/**
+          filters:
+            - StripPrefix=1
+        
+        # 考试服务文档
+        - id: exam-doc
+          uri: lb://studyapp4-exam
+          predicates:
+            - Path=/exam/doc.html,/exam/swagger-resources/**,/exam/v3/api-docs/**,/exam/webjars/**
+          filters:
+            - StripPrefix=1
+        
+        # 社区服务文档
+        - id: community-doc
+          uri: lb://studyapp4-community
+          predicates:
+            - Path=/community/doc.html,/community/swagger-resources/**,/community/v3/api-docs/**,/community/webjars/**
+          filters:
+            - StripPrefix=1
+        
+        # 后台管理服务文档
+        - id: admin-doc
+          uri: lb://studyapp4-admin
+          predicates:
+            - Path=/admin/doc.html,/admin/swagger-resources/**,/admin/v3/api-docs/**,/admin/webjars/**
+          filters:
+            - StripPrefix=1
+        
+        # ========== 业务API路由 ==========
         # 用户服务路由
         - id: studyapp4-user
           uri: lb://studyapp4-user
@@ -70,7 +120,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowed-origins: "*"
+            allowed-origin-patterns: "*"  # 改用 patterns 支持凭证
             allowed-methods: "*"
             allowed-headers: "*"
             allow-credentials: true
@@ -90,7 +140,7 @@ jwt:
 
 # 不需要鉴权的路径（逗号分隔）
 auth:
-  exclude-paths: /api/v1/user/wx-login,/api/v1/user/register,/api/v1/community/posts/list,/api/v1/resource/public/**
+  exclude-paths: /api/v1/user/wx-login,/api/v1/user/register,/api/v1/community/posts/list,/api/v1/resource/public/**,/user/**,/resource/**,/plan/**,/exam/**,/community/**,/admin/**,/health
 
 logging:
   level:

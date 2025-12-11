@@ -1,13 +1,13 @@
-# 考研学习小程序 StudyApp4
+# 考研学习小程序 - StudyApp4
 
-## 项目简介
-
-这是一个面向考研学生的学习小程序后端系统，提供资源管理、学习计划、题库练习、社区交流等核心功能。采用 Spring Cloud 微服务架构，支持高并发、高可用场景。
+一个面向考研学生的学习管理小程序，基于微服务架构构建，提供资源管理、学习计划、题库练习、社区交流等核心功能。
 
 ## 技术栈
 
-- **后端框架**: Spring Boot 3.2.0 + Spring Cloud 2023.0.0
-- **微服务组件**: Spring Cloud Alibaba 2023.0.0.0-RC1
+### 后端
+- **Spring Boot**: 3.0.2
+- **Spring Cloud**: 2022.0.0
+- **Spring Cloud Alibaba**: 2022.0.0.0
   - Nacos: 服务注册与发现、配置中心
   - Gateway: API 网关、统一鉴权
   - OpenFeign: 服务间调用

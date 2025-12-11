@@ -5,16 +5,22 @@ import com.kaoyan.common.result.Result;
 import com.kaoyan.resource.dto.ResourceCreateRequest;
 import com.kaoyan.resource.dto.ResourceQueryRequest;
 import com.kaoyan.resource.entity.Resource;
+import com.kaoyan.resource.service.CosUploadService;
 import com.kaoyan.resource.service.ResourceService;
 import com.kaoyan.resource.vo.CosCredentialVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 资源 Controller
  */
+@Tag(name = "资源管理", description = "资源相关接口，包括视频、文档、题库资源的上传和管理")
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/resource")
@@ -22,12 +28,31 @@ import org.springframework.web.bind.annotation.*;
 public class ResourceController {
     
     private final ResourceService resourceService;
+    private final CosUploadService cosUploadService;
     
     /**
-     * 获取 COS 上传凭证
+     * 直接上传文件到 COS
      */
+    @Operation(summary = "上传文件", description = "直接上传文件到腾讯云COS，支持视频、文档、图片等")
+    @PostMapping("/upload")
+    public Result<String> uploadFile(
+            @Parameter(description = "文件", required = true) @RequestParam("file") MultipartFile file,
+            @Parameter(description = "模块名称，用于分类存储", example = "resource") 
+            @RequestParam(value = "module", defaultValue = "resource") String module) {
+        log.info("上传文件: filename={}, size={}, module={}", 
+                file.getOriginalFilename(), file.getSize(), module);
+        
+        String fileUrl = cosUploadService.uploadFile(file, module);
+        return Result.success(fileUrl);
+    }
+    
+    /**
+     * 获取 COS 上传凭证（前端直传用）
+     */
+    @Operation(summary = "获取上传凭证", description = "获取腾讯云COS临时上传凭证，用于前端直传")
     @GetMapping("/upload-credential")
-    public Result<CosCredentialVO> getUploadCredential(@RequestParam String type) {
+    public Result<CosCredentialVO> getUploadCredential(
+            @Parameter(description = "资源类型", example = "video") @RequestParam String type) {
         log.info("获取上传凭证: type={}", type);
         CosCredentialVO credential = resourceService.getUploadCredential(type);
         return Result.success(credential);
