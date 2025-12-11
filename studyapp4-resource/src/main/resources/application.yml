@@ -68,3 +68,17 @@ mybatis-plus:
 logging:
   level:
     com.kaoyan.resource: DEBUG
+
+# 腾讯云 COS 配置（本地测试配置，生产环境从 Nacos 读取）
+tencent:
+  cos:
+    secret-id: YOUR_SECRET_ID          # 替换为真实的 SecretId
+    secret-key: YOUR_SECRET_KEY        # 替换为真实的 SecretKey
+    region: ap-guangzhou               # 替换为 Bucket 所在地域
+    bucket-name: your-bucket-1234567890  # 替换为真实的 Bucket 名称（格式：bucket-appid）
+    base-url: https://your-bucket-1234567890.cos.ap-guangzhou.myqcloud.com  # COS 访问域名
+    app-id: "1234567890"               # 替换为腾讯云 AppId
+    duration-seconds: 1800             # 临时密钥有效时长（秒），默认30分钟
+    use-sts: true                      # 是否使用 STS 临时密钥（推荐开启）
+    # 允许的操作，默认支持简单上传、表单上传、分块上传
+    allow-actions: "name/cos:PutObject,name/cos:PostObject,name/cos:InitiateMultipartUpload,name/cos:ListMultipartUploads,name/cos:ListParts,name/cos:UploadPart,name/cos:CompleteMultipartUpload"

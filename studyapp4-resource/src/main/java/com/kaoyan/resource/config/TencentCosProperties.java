@@ -1,6 +1,7 @@
 package com.kaoyan.resource.config;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ public class TencentCosProperties {
     @Value("${tencent.cos.secret-id:}")
     private String secretId;
 
-    // 显式绑定secret-key
     @Value("${tencent.cos.secret-key:}")
     private String secretKey;
 
@@ -30,6 +30,21 @@ public class TencentCosProperties {
     @Value("${tencent.cos.base-url:}")
     private String baseUrl;
 
-    @Value("${tencent.cos.duration-seconds:}")
+    @Value("${tencent.cos.duration-seconds:1800}")
     private Integer durationSeconds;
+    
+    @Value("${tencent.cos.app-id:}")
+    private String appId;
+    
+    /**
+     * 是否使用 STS 临时密钥
+     */
+    @Value("${tencent.cos.use-sts:true}")
+    private Boolean useSts;
+    
+    /**
+     * 允许的操作列表
+     */
+    @Value("${tencent.cos.allow-actions:name/cos:PutObject,name/cos:PostObject,name/cos:InitiateMultipartUpload,name/cos:ListMultipartUploads,name/cos:ListParts,name/cos:UploadPart,name/cos:CompleteMultipartUpload}")
+    private String allowActions;
 }

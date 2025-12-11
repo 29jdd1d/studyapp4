@@ -92,6 +92,13 @@
             <artifactId>cos_api</artifactId>
         </dependency>
 
+        <!-- 腾讯云 STS 临时密钥 -->
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos-sts_api</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
         <!-- RabbitMQ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
