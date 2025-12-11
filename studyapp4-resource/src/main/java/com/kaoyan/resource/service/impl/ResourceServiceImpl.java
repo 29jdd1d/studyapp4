@@ -8,6 +8,7 @@ import com.kaoyan.common.exception.BusinessException;
 import com.kaoyan.common.result.PageResult;
 import com.kaoyan.common.result.ResultCode;
 import com.kaoyan.resource.config.CosConfig;
+import com.kaoyan.resource.config.TencentCosProperties;
 import com.kaoyan.resource.dto.ResourceCreateRequest;
 import com.kaoyan.resource.dto.ResourceQueryRequest;
 import com.kaoyan.resource.entity.Resource;
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class ResourceServiceImpl implements ResourceService {
     
     private final ResourceMapper resourceMapper;
-    private final CosConfig cosConfig;
+    private final TencentCosProperties cosConfig;
     private final RedisTemplate<String, Object> redisTemplate;
     
     @Override
@@ -54,7 +55,7 @@ public class ResourceServiceImpl implements ResourceService {
         credential.setTmpSecretKey(cosConfig.getSecretKey());
         credential.setSessionToken("");
         credential.setExpiration(System.currentTimeMillis() + cosConfig.getDurationSeconds() * 1000);
-        credential.setBucket(cosConfig.getBucket());
+        credential.setBucket(cosConfig.getBucketName());
         credential.setRegion(cosConfig.getRegion());
         credential.setPrefix(prefix);
         

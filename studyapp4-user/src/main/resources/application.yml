@@ -7,7 +7,7 @@ spring:
   cloud:
     nacos:
       username: nacos
-      password: nacos123
+      password: nacos
       discovery:
         server-addr: localhost:8848
         namespace: dev
@@ -23,7 +23,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/studyapp4_user?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 123456
     druid:
       initial-size: 5
       min-idle: 5
@@ -61,16 +61,10 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-# 微信小程序配置
-wechat:
-  appid: your-wechat-appid
-  secret: your-wechat-secret
-  login-url: https://api.weixin.qq.com/sns/jscode2session
-
-# JWT 配置
-jwt:
-  secret: studyapp4-jwt-secret-key-2025-kaoyan-learning-platform
-  expiration: 604800000  # 7天（毫秒）
+# # JWT 配置（从 Nacos 读取）
+# jwt:
+#   secret: studyapp4-jwt-secret-key-2025-kaoyan-learning-platform
+#   expiration: 604800000  # 7天（毫秒）
 
 logging:
   level:

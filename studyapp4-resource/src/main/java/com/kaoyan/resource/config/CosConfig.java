@@ -15,25 +15,16 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "cos")
+
 public class CosConfig {
-    
-    private String secretId;
-    
-    private String secretKey;
-    
-    private String region;
-    
-    private String bucket;
-    
-    private String baseUrl;
-    
-    private Integer durationSeconds;
+    private final TencentCosProperties tencentCosProperties;
+
     
     @Bean
     public COSClient cosClient() {
-        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
-        Region regionObj = new Region(region);
+        System.out.println("Cos的ID: " +tencentCosProperties.getSecretId() + ", region: " + tencentCosProperties.getRegion());
+        COSCredentials cred = new BasicCOSCredentials(tencentCosProperties.getSecretId(), tencentCosProperties.getSecretKey());
+        Region regionObj = new Region(tencentCosProperties.getRegion());
         ClientConfig clientConfig = new ClientConfig(regionObj);
         return new COSClient(cred, clientConfig);
     }

@@ -9,6 +9,8 @@ import com.kaoyan.common.constant.CommonConstants;
 import com.kaoyan.common.exception.BusinessException;
 import com.kaoyan.common.result.ResultCode;
 import com.kaoyan.common.utils.JwtUtil;
+import com.kaoyan.user.config.JwtProperties;
+import com.kaoyan.user.config.WechatProperties;
 import com.kaoyan.user.dto.UserUpdateRequest;
 import com.kaoyan.user.dto.WxLoginRequest;
 import com.kaoyan.user.entity.User;
@@ -40,28 +42,17 @@ public class UserServiceImpl implements UserService {
     
     private final UserMapper userMapper;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final WechatProperties wechatProperties;
+    private final JwtProperties jwtProperties;
     
-    @Value("${wechat.appid}")
-    private String appid;
-    
-    @Value("${wechat.secret}")
-    private String secret;
-    
-    @Value("${wechat.login-url}")
-    private String loginUrl;
-    
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-    
-    @Value("${jwt.expiration}")
-    private Long jwtExpiration;
+
     
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoginVO wxLogin(WxLoginRequest request) {
         // 1. 调用微信接口获取 openid 和 session_key
         String url = String.format("%s?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
-                loginUrl, appid, secret, request.getCode());
+                wechatProperties.getLoginUrl(), wechatProperties.getAppid(), wechatProperties.getSecret(), request.getCode());
         
         String response = HttpUtil.get(url);
         log.info("微信登录响应: {}", response);
@@ -111,7 +102,7 @@ public class UserServiceImpl implements UserService {
         // 4. 生成 JWT Token
         Map<String, Object> claims = new HashMap<>();
         claims.put(CommonConstants.JWT_USER_ID, user.getId());
-        String token = JwtUtil.generateToken(user.getId().toString(), claims, jwtExpiration, jwtSecret);
+        String token = JwtUtil.generateToken(user.getId().toString(), claims, jwtProperties.getExpiration(), jwtProperties.getSecret());
         
         // 5. 缓存用户信息到 Redis
         String redisKey = CommonConstants.REDIS_USER_PREFIX + user.getId();

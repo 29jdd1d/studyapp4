@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       username: nacos
-      password: nacos123
+      password: nacos
       discovery:
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
       config:
