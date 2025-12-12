@@ -67,7 +67,7 @@ public class ResourceServiceImpl implements ResourceService {
                 log.info("获取 STS 临时密钥成功, prefix={}, expiredTime={}", prefix, stsResponse.expiredTime);
             } catch (Exception e) {
                 log.error("获取 STS 临时密钥失败", e);
-                throw new BusinessException(ResultCode.SYSTEM_ERROR, "获取上传凭证失败");
+                throw new BusinessException(ResultCode.SERVER_ERROR.getCode(), "获取上传凭证失败");
             }
         } else {
             // 不使用 STS，直接返回永久密钥（不推荐用于生产环境）
