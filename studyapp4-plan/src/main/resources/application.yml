@@ -2,6 +2,8 @@ server:
   port: 8084
 
 spring:
+  jmx:
+    enabled: false
   application:
     name: studyapp4-plan
   cloud:

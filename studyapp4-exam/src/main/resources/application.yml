@@ -2,6 +2,8 @@ server:
   port: 8083
 
 spring:
+  jmx:
+    enabled: false
   application:
     name: studyapp4-exam
   cloud:
